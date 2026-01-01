@@ -1,5 +1,4 @@
 name: AI Issue Assessment
-
 on:
   issues:
     types: [opened, labeled]
@@ -7,7 +6,7 @@ on:
 jobs:
   ai-issue-assessment:
     if: >
-      (github.event.action == 'opened' && github.event.issue.labels[0] == null) ||
+      (github.event.action == 'opened') ||
       (github.event.action == 'labeled' && github.event.label.name == 'bug')
     runs-on: ubuntu-latest
     permissions:
