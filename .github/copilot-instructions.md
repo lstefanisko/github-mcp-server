@@ -94,7 +94,7 @@ go test ./pkg/github -run TestGetMe
 
 - **go.mod / go.sum:** Go module dependencies (Go 1.24.0+)
 - **.golangci.yml:** Linter configuration (v2 format, ~15 linters enabled)
-- **Dockerfile:** Multi-stage build (golang:1.25.3-alpine → distroless)
+- **Dockerfile:** Multi-stage build (golang:1.25.4-alpine → distroless/base-debian12)
 - **server.json:** MCP server metadata for registry
 - **.goreleaser.yaml:** Release automation config
 - **.gitignore:** Excludes bin/, dist/, vendor/, *.DS_Store, github-mcp-server binary
@@ -182,6 +182,44 @@ All workflows run on push/PR unless noted. Located in `.github/workflows/`:
 - Follow standard Go conventions (Effective Go, Go proverbs)
 - **Test changes thoroughly** before committing
 - Export functions (capitalize) if they could be used by other repos as a library
+
+### Tool Implementation Pattern
+
+All MCP tools in `pkg/github/` follow a consistent pattern using `NewTool()`:
+
+```go
+func MyTool(t translations.TranslationHelperFunc) inventory.ServerTool {
+    return NewTool(
+        ToolsetMetadataFoo,  // Toolset this tool belongs to
+        mcp.Tool{
+            Name:        "my_tool",
+            Description: t("TOOL_KEY", "English description"),
+            Annotations: &mcp.ToolAnnotations{
+                Title:        t("TOOL_TITLE_KEY", "User-facing title"),
+                ReadOnlyHint: true,  // If tool only reads data
+            },
+            InputSchema: &jsonschema.Schema{
+                Type: "object",
+                Properties: map[string]*jsonschema.Schema{ /* params */ },
+                Required: []string{"param1"},
+            },
+        },
+        func(ctx context.Context, deps ToolDependencies, _ *mcp.CallToolRequest, args map[string]any) (*mcp.CallToolResult, any, error) {
+            // 1. Extract and validate parameters using RequiredParam/OptionalParam helpers
+            // 2. Get GitHub client: client, err := deps.GetClient(ctx)
+            // 3. Call GitHub API
+            // 4. Return result using utils.NewToolResult*() or ghErrors.NewGitHubAPIErrorResponse()
+        },
+    )
+}
+```
+
+**Key conventions:**
+- Tool names use `snake_case`
+- Use translation helpers for all user-facing strings
+- Set `ReadOnlyHint: true` for tools that don't modify data
+- Parameter extraction uses `RequiredParam[T](` and `OptionalParam[T](` helper functions
+- Return structured data as JSON text content in `mcp.CallToolResult`
 
 ## Common Development Workflows
 
