@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --font-orbitron: 'Orbitron', system-ui, sans-serif;
+  --font-mono: 'monospace';
+
+  --color-accent: #00f3ff;
+  --color-accent-dark: #008f96;
+  --color-neural-bg: #0a0a12;
+
+  --image-grid-pattern: linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+
+  --animate-spin-slow: spin 20s linear infinite;
+  --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom Styles - Sci-Fi Restoration */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
+:root {
+  --neon-cyan: #00f3ff;
+  --bg-dark: #050505;
+}
+
+body {
+  @apply bg-neural-bg text-white font-mono overflow-x-hidden;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 50%);
+}
+
+.glass-panel {
+  @apply bg-black/40 backdrop-blur-md border border-accent/30;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+  border-radius: 12px;
+}
+
+.box-shadow-glow {
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+}
+
+.neon-text {
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.5);
+}
+
+/* Custom Range Input (Neon Style) */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #00f3ff;
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 0 10px #00f3ff;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 243, 255, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 243, 255, 0.6);
+}
